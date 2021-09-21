@@ -1,8 +1,13 @@
-FROM ubuntu
+FROM ubuntu:bionic
 
-ENV SOMETHING=this
+ARG DOCKER_COMPOSE_VERSION=1.29.2
 
-# Run the Update
-RUN apt-get update && apt-get upgrade -y
+# https://docs.docker.com/compose/install/
+RUN \
+   apt-get -y update && \
+   apt-get -y install ca-certificates curl docker.io default-jdk && \
+   rm -rf /var/lib/apt/lists/* && \
+   curl -L "https://github.com/docker/compose/releases/download/${DOCKER_COMPOSE_VERSION}/docker-compose-$(uname -s)-$(uname -m)" -o /usr/local/bin/docker-compose && \
+   chmod +x /usr/local/bin/docker-compose
 
-ENTRYPOINT ["bash"]
+ENTRYPOINT ["/usr/local/bin/docker-compose"]
